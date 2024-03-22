@@ -1,0 +1,42 @@
+---
+- name: playbook to install spring petclinc
+  hosts: all
+  become: yes
+  tasks:
+    - name: update packages and install java 17
+      ansible.builtin.apt:
+        name: openjdk-17-jdk
+        update_cache: yes
+        state: present
+    - name: create a spc group
+      ansible.builtin.group:
+        name: spc
+        state: present
+    - name: create a spc user
+      ansible.builtin.user:
+        name: spc
+        group: spc
+        state: present
+    - name: download jar file
+      ansible.builtin.get_url:
+        url: https://khajareferenceapps.s3.ap-south-1.amazonaws.com/spring-petclinic-3.2.0-SNAPSHOT.jar
+        dest: /usr/share/spc/spring-petclinic-3.2.0-SNAPSHOT.jar
+        owner: spc
+    - name: copy service file 
+      ansible.builtin.copy:
+        src: spc.service
+        dest: /etc/systemd/system/spc.service
+      notify:
+        - start spc
+    - name: ensure spc is running
+      ansible.builtin.service:
+        name: spc.service
+        state: started
+  handlers:
+    - name: start spc
+      ansible.builtin.systemd_service:
+        name: spc.service
+        daemon_reload: true
+        state: restarted
+        enabled: yes
+
