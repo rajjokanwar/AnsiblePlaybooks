@@ -1,0 +1,20 @@
+# ansible yaml for
+#sudo apt update
+#sudo apt install nano -y
+#sudo apt install git -y
+
+---
+- name: installing nano and git 
+  hosts: all
+  become: yes
+  tasks:
+    - name: installing nano
+      ansible.builtin.apt:
+        update_cache: yes
+        name: nano
+        state: present
+    - name: installing git
+      ansible.builtin.apt:
+        name: git
+        state: present
+

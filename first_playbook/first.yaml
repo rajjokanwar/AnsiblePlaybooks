@@ -1,0 +1,15 @@
+# ansible playbook to install tree 
+#(sudo apt update, sudo apt install tree -y)
+---
+- name: install tree
+  hosts: all
+  become: yes
+  tasks:
+    - name: im trying to installing tree
+      ansible.builtin.apt:
+        update_cache: yes
+        name: tree
+        state: present
+
+        
+            

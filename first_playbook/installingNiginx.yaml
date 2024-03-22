@@ -1,0 +1,23 @@
+# Installing nginx and apache2 
+# sudo apt update 
+# sudo apt install nginx 
+
+---
+- name: installing nginx and apache2
+  hosts: all
+  become: yes
+  task:
+    -name: installing nginx
+     ansible.buildin.apt:
+       update_cache: yes
+       name: nginx
+       state: present
+       
+
+       
+    -name: installing apache
+      ansible.buildin.apt:
+        name: apache2
+        state: present
+
+
